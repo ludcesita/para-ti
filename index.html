@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>KF</title>
+    
+
+  </head>
+    
+  <body>
+  Parque de las Americas<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Flores para K</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+background:linear-gradient(160deg,#e6d6fa,#d8c4f0,#cbb2f5);
+color:#4a2c6d;
+text-align:center;
+font-family:'Cormorant Garamond', serif;
+overflow-x:hidden;
+}
+
+/* ================= CARTA ================= */
+
+#letter{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+background:rgba(210,180,255,0.35);
+z-index:10;
+}
+
+.paper{
+background:#fffdfc;
+width:650px;
+max-width:90%;
+padding:60px;
+border-radius:10px;
+box-shadow:0 25px 60px rgba(0,0,0,0.25);
+position:relative;
+text-align:left;
+}
+
+.paper::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:10px;
+background:linear-gradient(to right,#e6ccff,#ffe680);
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+}
+
+.paper h2{
+font-family:'Dancing Script', cursive;
+font-size:46px;
+color:#7b4bb7;
+text-align:center;
+margin-bottom:30px;
+}
+
+.paper p{
+font-size:20px;
+line-height:1.9;
+margin-bottom:20px;
+}
+
+.signature{
+margin-top:40px;
+font-family:'Dancing Script', cursive;
+font-size:28px;
+color:#a4508b;
+text-align:right;
+}
+
+button{
+margin-top:30px;
+padding:12px 28px;
+background:#b388eb;
+border:none;
+color:white;
+cursor:pointer;
+border-radius:25px;
+font-family:'Dancing Script', cursive;
+font-size:22px;
+transition:0.3s;
+}
+
+button:hover{
+background:#d1aaff;
+transform:scale(1.05);
+}
+
+/* ================= QUIZ ================= */
+
+#quiz{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(160deg,#e6d6fa,#d8c4f0);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:40px;
+z-index:9;
+}
+
+h1{
+font-family:'Dancing Script', cursive;
+font-size:52px;
+color:#7b4bb7;
+}
+
+.option{
+margin:10px;
+}
+
+/* ================= FLORES ================= */
+
+canvas{
+margin-top:30px;
+image-rendering:pixelated;
+}
+
+#kContainer{
+margin:20px auto;
+max-height:150px;
+overflow:auto;
+font-size:11px;
+background:rgba(255,255,255,0.6);
+padding:15px;
+border-radius:15px;
+word-break:break-all;
+width:80%;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ================= CARTA ================= -->
+
+<div id="letter">
+<div class="paper">
+
+<h2>Para ti 🌷</h2>
+
+<p>
+Tu amistad ha sido una sorpresa linda en mi vida. En tan poco tiempo lograste convertirte en alguien bastante importante para mí.
+
+Nuestras conversaciones me han enseñado más de lo que imaginas, me han hecho cuestionarme, crecer, entenderme mejor, y a veces por supuesto me han hecho enojar:p (no es cierto)
+
+Contigo he aprendido, me he inspirado y también me he sentido acompañada de una manera muy real.
+
+Estuve pensando que podía hacer que fuera lindo/significativo/especial, hasta que la respuesta fue revelada ante mi en forma de tiktok. Fue cuando vi el video que compartiste sobre la fórmula autorreferencial de Tupper que tuve una idea, me encanta aprender y crear y por alguna razón había olvidado eso, así que gracias por recordarmelo, esto no es nada elaborado por supuesto, pero en algún lugar tenemos que empezar.
+</p>
+
+<p>
+Como sabemos, la constante k es un número entero enorme que representa la imagen de la fórmula en binario (según google), así que para este día quise cumplir uno de mis clichés favoritos (que por cierto, no me dejaste fácil)
+</p>
+
+<p>
+Yo decidí esconder flores dentro de un número.
+Porque si las matemáticas pueden guardar belleza infinita…
+yo puedo guardar todo lo que siento por ti en ellas.
+</p>
+
+<div class="signature">
+Con cariño,<br>
+Ludcesita 💜
+</div>
+
+<div style="text-align:center;">
+<button onclick="startQuiz()">Continuar</button>
+</div>
+
+</div>
+</div>
+
+<!-- ================= QUIZ ================= -->
+
+<div id="quiz" style="display:none;">
+<h2 style="font-family:'Dancing Script', cursive; font-size:42px; color:#7b4bb7;">
+Antes de ver el jardín…
+</h2>
+<p id="question" style="font-size:22px;"></p>
+<div id="answers"></div>
+</div>
+
+<!-- ================= CONTENIDO FINAL ================= -->
+
+<h1 id="title" style="display:none;">Tome sus flores:3</h1>
+<canvas id="canvas"></canvas>
+<h3 id="kTitle" style="display:none;">K:</h3>
+<div id="kContainer"></div>
+
+<script>
+
+/* ================= QUIZ ================= */
+
+const questions=[
+{
+q:"Solo porque quuise ser mamoncita jaja... ¿Cuál es el mamifero más grande del mundo?",
+a:["Elefante africano","Ballena","Hipopotamo"],
+correct:1
+},
+{
+q:"¿Qué novela plantea un universo donde el lenguaje altera la percepción del tiempo, inspirándose en la hipótesis Sapir-Whorf?",
+a:["Dune","Story of Your Life","Snow Crash"],
+correct:1
+},
+{
+q:"¿Qué hay escondido en este número?",
+a:["Flores para ti","Una ecuación vacía","Nada especial"],
+correct:0
+}
+];
+
+let current=0;
+
+function startQuiz(){
+document.getElementById("letter").style.display="none";
+document.getElementById("quiz").style.display="flex";
+loadQuestion();
+}
+
+function loadQuestion(){
+const q=questions[current];
+document.getElementById("question").textContent=q.q;
+const answersDiv=document.getElementById("answers");
+answersDiv.innerHTML="";
+
+q.a.forEach((ans,i)=>{
+let btn=document.createElement("button");
+btn.textContent=ans;
+btn.className="option";
+btn.onclick=()=>checkAnswer(i);
+answersDiv.appendChild(btn);
+});
+}
+
+function checkAnswer(i){
+if(i===questions[current].correct){
+current++;
+if(current<questions.length){
+loadQuestion();
+}else{
+document.getElementById("quiz").style.display="none";
+startFlowers();
+}
+}else{
+alert("Inténtalo otra vez 🌸");
+}
+}
+
+/* ================= FLORES ================= */
+
+function startFlowers(){
+document.getElementById("title").style.display="block";
+document.getElementById("kTitle").style.display="block";
+generateFlowers();
+}
+
+function generateFlowers(){
+
+const WIDTH=106;
+const HEIGHT=17;
+const scale=6;
+
+let bits=[];
+const centers=[15,40,65,90];
+
+for(let y=0;y<HEIGHT;y++){
+for(let x=0;x<WIDTH;x++){
+
+let pixel=0;
+
+for(let c of centers){
+
+let dx=x-c;
+let dy=y-12;
+
+/* pétalos */
+if(dx*dx + dy*dy < 9) pixel=1;
+
+/* tallo */
+if(x===c && y<12) pixel=1;
+
+/* hojas */
+if(x===c-2 && y===6) pixel=1;
+if(x===c+2 && y===7) pixel=1;
+}
+
+bits.push(pixel);
+}
+}
+
+/* Generar K real */
+let K=0n;
+for(let i=0;i<bits.length;i++){
+if(bits[i]===1){
+K+=1n<<BigInt(i);
+}
+}
+
+document.getElementById("kContainer").textContent=K.toString();
+
+/* Dibujar animado */
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=WIDTH*scale;
+canvas.height=HEIGHT*scale;
+
+let currentHeight=0;
+
+function grow(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+for(let x=0;x<WIDTH;x++){
+for(let y=0;y<=currentHeight;y++){
+
+let index=y*WIDTH+x;
+
+if(bits[index]===1){
+
+let flowerIndex=Math.floor(x/25);
+
+if(y>=10){
+ctx.fillStyle=(flowerIndex%2===0)?"#ffffff":"#7a1f2f";
+}else{
+ctx.fillStyle="#2f5d3a";
+}
+
+ctx.fillRect(x*scale,(HEIGHT-y-1)*scale,scale,scale);
+}
+}
+}
+
+currentHeight++;
+if(currentHeight<HEIGHT){
+requestAnimationFrame(grow);
+}
+}
+
+grow();
+}
+
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
